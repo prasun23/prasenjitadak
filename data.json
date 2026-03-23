@@ -1,0 +1,48 @@
+{
+  "name": "Dr. Prasenjit Adak",
+  "title": "Educator · Researcher · Creator",
+  "tagline": "A mind that moves between the rigour of scholarship and the freedom of art.",
+  "profile_pic": "profile.jpg",
+  "about": {
+    "bio": [
+      "I am Dr. Prasenjit Adak — an academic, researcher, and maker with a passion for ideas that cross boundaries. My work spans the classroom and the laboratory, the studio and the screen.",
+      "Whether I'm teaching the next generation, publishing research, composing music, or building digital products — I bring the same depth of thought and care for craft to everything I do."
+    ],
+    "stats": [
+      { "value": "10+", "label": "Years Teaching" },
+      { "value": "∞",   "label": "Curiosity" },
+      { "value": "6+",  "label": "Creative Domains" },
+      { "value": "1",   "label": "Unique Voice" }
+    ]
+  },
+  "work": [
+    {
+      "icon": "🎓",
+      "title": "Teaching",
+      "description": "Shaping minds through thoughtful pedagogy, engaging lectures, and a deep commitment to student growth. Education, for me, is not just a profession — it is a calling."
+    },
+    {
+      "icon": "🔬",
+      "title": "Research",
+      "description": "Pursuing original inquiry at the intersection of disciplines. My research is driven by questions that matter, methodologies that are rigorous, and insights that endure."
+    }
+  ],
+  "play": [
+    { "icon": "🎵", "title": "Music",             "description": "Composing, listening, and letting sound shape thought." },
+    { "icon": "📚", "title": "Books",             "description": "A lifelong reader moving across genres, languages, and centuries." },
+    { "icon": "🧊", "title": "3D Models",         "description": "Sculpting ideas into form — virtual geometry as a creative medium." },
+    { "icon": "🎨", "title": "Graphics Designing","description": "Visual storytelling through composition, colour, and type." },
+    { "icon": "📱", "title": "App Development",   "description": "Building tools that solve real problems with elegant interfaces." },
+    { "icon": "🌐", "title": "Websites",          "description": "Crafting digital experiences with purpose, precision, and personality." },
+    { "icon": "🛒", "title": "e-Commerce",        "description": "From storefronts to checkout flows — building commerce that converts and delights." }
+  ],
+  "contact": {
+    "intro": "Whether it's a collaboration, a conversation, or simply a hello — I'd love to hear from you.",
+    "links": [
+      { "label": "✉ prasenjit.adak@example.com", "href": "mailto:prasenjit.adak@example.com" },
+      { "label": "in LinkedIn",                  "href": "https://linkedin.com/in/prasenjitadak" },
+      { "label": "⌥ GitHub",                     "href": "https://github.com/prasenjitadak" },
+      { "label": "🎓 Google Scholar",            "href": "https://scholar.google.com" }
+    ]
+  }
+}

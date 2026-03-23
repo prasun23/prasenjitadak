@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dr. Prasenjit Adak</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0a; --surface: #111111; --surface2: #161616;
+      --border: #1e1e1e; --accent: #c8a96e; --accent2: #7a9e8e;
+      --text: #d4cfc8; --muted: #5a5650; --heading: #ede8e0;
+      --panel-w: 300px;
+    }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 18px; line-height: 1.7; display: flex;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.5;
+    }
+
+    /* LEFT PANEL */
+    #panel {
+      width: var(--panel-w); min-width: var(--panel-w); height: 100vh;
+      background: var(--surface); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; overflow: hidden;
+      position: relative; z-index: 10;
+    }
+    .panel-top {
+      padding: 2.2rem 1.8rem 1.6rem;
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .profile-pic-wrap {
+      width: 74px; height: 74px; border-radius: 50%;
+      border: 1.5px solid var(--accent); overflow: hidden;
+      margin-bottom: 1.1rem; background: var(--surface2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .profile-pic-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-pic-placeholder {
+      width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; background: linear-gradient(135deg, #1a1a1a, #222);
+      color: var(--accent); font-family: 'Cormorant Garamond', serif;
+      font-weight: 300; letter-spacing: 0.05em;
+    }
+    .panel-name { font-size: 1.08rem; font-weight: 400; color: var(--heading); line-height: 1.25; margin-bottom: 0.3rem; }
+    .panel-name em { font-style: italic; color: var(--accent); }
+    .panel-title { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); line-height: 1.6; }
+
+    .tabs { flex: 1; display: flex; flex-direction: column; padding: 1rem 0; overflow-y: auto; }
+    .tabs::-webkit-scrollbar { width: 3px; }
+    .tabs::-webkit-scrollbar-thumb { background: var(--border); }
+    .tab-group-label { font-family: 'DM Mono', monospace; font-size: 0.53rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); padding: 0.9rem 1.8rem 0.4rem; opacity: 0.6; }
+    .tab-btn {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.75rem 1.8rem; background: none; border: none; cursor: pointer;
+      text-align: left; color: var(--muted);
+      font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 300;
+      transition: color 0.25s, background 0.25s; position: relative; width: 100%;
+    }
+    .tab-icon { font-size: 0.9rem; width: 1.3rem; text-align: center; flex-shrink: 0; }
+    .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.02); }
+    .tab-btn.active { color: var(--heading); background: rgba(200,169,110,0.06); }
+    .tab-btn.active::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent); }
+
+    .panel-footer { padding: 1.2rem 1.8rem; border-top: 1px solid var(--border); flex-shrink: 0; }
+    .panel-footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+
+    /* RIGHT CONTENT */
+    #content { flex: 1; height: 100vh; overflow-y: auto; overflow-x: hidden; }
+    #content::-webkit-scrollbar { width: 4px; }
+    #content::-webkit-scrollbar-thumb { background: var(--border); }
+
+    .pane { display: none; padding: 4rem 5rem; min-height: 100vh; animation: fadeIn 0.4s ease; }
+    .pane.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: translateX(0); } }
+
+    .pane-label { font-family: 'DM Mono', monospace; font-size: 0.63rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; }
+    .pane-label::after { content: ''; flex: 1; max-width: 60px; height: 1px; background: var(--accent); opacity: 0.4; }
+    h2 { font-size: clamp(2rem, 3.2vw, 3rem); font-weight: 300; color: var(--heading); line-height: 1.15; margin-bottom: 2rem; }
+    h2 em { font-style: italic; color: var(--accent); }
+
+    /* About */
+    .about-bio p { font-size: 1.05rem; color: var(--text); font-weight: 300; margin-bottom: 1.2rem; max-width: 660px; }
+    .about-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 3rem; }
+    .stat { border: 1px solid var(--border); padding: 1.4rem 1.2rem; position: relative; }
+    .stat::before { content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 100%; background: var(--accent); }
+    .stat-num { font-size: 2rem; font-weight: 300; color: var(--accent); line-height: 1; }
+    .stat-label { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
+
+    /* Work */
+    .work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .work-card { background: var(--surface); border: 1px solid var(--border); padding: 2.5rem 2rem; position: relative; overflow: hidden; transition: background 0.3s; }
+    .work-card:hover { background: var(--surface2); }
+    .work-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.4s; }
+    .work-card:hover::after { width: 100%; }
+    .work-icon { font-size: 1.8rem; margin-bottom: 1rem; display: block; }
+    .work-card h3 { font-size: 1.5rem; font-weight: 300; color: var(--heading); margin-bottom: 0.7rem; }
+    .work-card p { font-size: 0.93rem; color: var(--muted); font-weight: 300; line-height: 1.7; }
+
+    /* Play */
+    .play-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .play-item { border: 1px solid var(--border); padding: 1.8rem 1.5rem; transition: border-color 0.3s, transform 0.3s; position: relative; }
+    .play-item:hover { border-color: var(--accent2); transform: translateY(-3px); }
+    .play-num { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--muted); letter-spacing: 0.2em; margin-bottom: 0.8rem; }
+    .play-item h4 { font-size: 1.18rem; font-weight: 300; color: var(--heading); margin-bottom: 0.4rem; }
+    .play-item p { font-size: 0.87rem; color: var(--muted); font-weight: 300; }
+    .play-icon { position: absolute; top: 1.2rem; right: 1.2rem; font-size: 1.2rem; }
+
+    /* Contact */
+    .contact-intro { font-size: 1.05rem; color: var(--muted); font-weight: 300; max-width: 540px; margin-bottom: 2.5rem; }
+    .contact-links { display: flex; flex-direction: column; max-width: 540px; }
+    .contact-link { display: flex; justify-content: space-between; align-items: center; padding: 1.3rem 0; border-bottom: 1px solid var(--border); text-decoration: none; color: var(--text); font-size: 1rem; transition: color 0.3s; }
+    .contact-link:hover { color: var(--accent); }
+    .arrow { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); transition: transform 0.3s, color 0.3s; }
+    .contact-link:hover .arrow { transform: translateX(6px); color: var(--accent); }
+
+    /* Loading */
+    #loading { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 1000; flex-direction: column; gap: 1rem; }
+    #loading p { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    .loader { width: 30px; height: 30px; border: 1px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      html, body { overflow: auto; height: auto; }
+      body { flex-direction: column; }
+      #panel { width: 100%; min-width: unset; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+      .tabs { flex-direction: row; overflow-x: auto; padding: 0; }
+      .tab-group-label { display: none; }
+      .tab-btn { padding: 1rem 1.2rem; white-space: nowrap; }
+      .tab-btn.active::before { top: auto; bottom: 0; left: 0; right: 0; width: 100%; height: 2px; }
+      #content { height: auto; }
+      .pane { padding: 2.5rem 1.5rem; min-height: auto; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      .work-grid, .play-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="loading"><div class="loader"></div><p>Loading portfolio…</p></div>
+
+<aside id="panel">
+  <div class="panel-top">
+    <div class="profile-pic-wrap" id="profilePicWrap">
+      <div class="profile-pic-placeholder">PA</div>
+    </div>
+    <div class="panel-name" id="panelName">—</div>
+    <div class="panel-title" id="panelTitle">—</div>
+  </div>
+  <nav class="tabs" id="tabs"></nav>
+  <div class="panel-footer"><p id="footerYear"></p></div>
+</aside>
+
+<main id="content">
+  <div class="pane active" id="pane-about"></div>
+  <div class="pane" id="pane-work"></div>
+  <div class="pane" id="pane-play"></div>
+  <div class="pane" id="pane-contact"></div>
+</main>
+
+<script>
+  const TABS = [
+    { id:'about',   label:'About Me', icon:'◈', group:'Menu' },
+    { id:'work',    label:'Work',     icon:'◉', group:null  },
+    { id:'play',    label:'Play',     icon:'◇', group:null  },
+    { id:'contact', label:'Contact',  icon:'◎', group:null  },
+  ];
+
+  function switchTab(id) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+    document.querySelectorAll('.pane').forEach(p => p.classList.toggle('active', p.id === 'pane-' + id));
+    document.getElementById('content').scrollTop = 0;
+  }
+
+  function buildTabs(activeId) {
+    const nav = document.getElementById('tabs');
+    let lastGroup = null;
+    TABS.forEach(tab => {
+      if (tab.group && tab.group !== lastGroup) {
+        const lbl = document.createElement('div');
+        lbl.className = 'tab-group-label';
+        lbl.textContent = tab.group;
+        nav.appendChild(lbl);
+        lastGroup = tab.group;
+      }
+      const btn = document.createElement('button');
+      btn.className = 'tab-btn' + (tab.id === activeId ? ' active' : '');
+      btn.dataset.tab = tab.id;
+      btn.innerHTML = `<span class="tab-icon">${tab.icon}</span>${tab.label}`;
+      btn.addEventListener('click', () => switchTab(tab.id));
+      nav.appendChild(btn);
+    });
+  }
+
+  function buildPanel(d) {
+    const parts = d.name.split(' ');
+    const last = parts.pop();
+    document.getElementById('panelName').innerHTML = parts.join(' ') + ' <em>' + last + '</em>';
+    document.getElementById('panelTitle').textContent = d.title;
+    document.getElementById('footerYear').textContent = `© ${new Date().getFullYear()} ${d.name}`;
+    document.title = d.name;
+    if (d.profile_pic) {
+      const img = new Image();
+      img.src = d.profile_pic;
+      img.alt = d.name;
+      img.onload = () => { const w = document.getElementById('profilePicWrap'); w.innerHTML = ''; w.appendChild(img); };
+    }
+  }
+
+  function buildAbout(d) {
+    document.getElementById('pane-about').innerHTML = `
+      <div class="pane-label">About Me</div>
+      <h2>Bridging knowledge<br/>with <em>curiosity</em></h2>
+      <div class="about-bio">${d.about.bio.map(p=>`<p>${p}</p>`).join('')}</div>
+      <div class="about-stats">${d.about.stats.map(s=>`
+        <div class="stat"><div class="stat-num">${s.value}</div><div class="stat-label">${s.label}</div></div>`).join('')}
+      </div>`;
+  }
+
+  function buildWork(d) {
+    document.getElementById('pane-work').innerHTML = `
+      <div class="pane-label">Work</div>
+      <h2>Where <em>expertise</em><br/>meets impact</h2>
+      <div class="work-grid">${d.work.map(w=>`
+        <div class="work-card">
+          <span class="work-icon">${w.icon}</span>
+          <h3>${w.title}</h3>
+          <p>${w.description}</p>
+        </div>`).join('')}
+      </div>`;
+  }
+
+  function buildPlay(d) {
+    document.getElementById('pane-play').innerHTML = `
+      <div class="pane-label">Play</div>
+      <h2>Life beyond<br/>the <em>lecture hall</em></h2>
+      <div class="play-grid">${d.play.map((item,i)=>`
+        <div class="play-item">
+          <div class="play-num">0${i+1}</div>
+          <span class="play-icon">${item.icon}</span>
+          <h4>${item.title}</h4>
+          <p>${item.description}</p>
+        </div>`).join('')}
+      </div>`;
+  }
+
+  function buildContact(d) {
+    document.getElementById('pane-contact').innerHTML = `
+      <div class="pane-label">Contact</div>
+      <h2>Let's <em>connect</em></h2>
+      <p class="contact-intro">${d.contact.intro}</p>
+      <div class="contact-links">${d.contact.links.map(l=>`
+        <a href="${l.href}" class="contact-link" target="_blank">
+          <span>${l.label}</span><span class="arrow">→</span>
+        </a>`).join('')}
+      </div>`;
+  }
+
+  (async () => {
+    try {
+      const res = await fetch('data.json');
+      if (!res.ok) throw new Error('data.json not found');
+      const data = await res.json();
+      buildPanel(data);
+      buildTabs('about');
+      buildAbout(data);
+      buildWork(data);
+      buildPlay(data);
+      buildContact(data);
+      document.getElementById('loading').style.display = 'none';
+    } catch(e) {
+      document.getElementById('loading').innerHTML =
+        `<p style="color:#c06060;font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.15em;text-align:center;">
+          Could not load data.json.<br/>Make sure it sits in the same folder as index.html.
+        </p>`;
+    }
+  })();
+</script>
+</body>
+</html>
